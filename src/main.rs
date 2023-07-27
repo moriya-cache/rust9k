@@ -1,3 +1,5 @@
+use std::io::{self, BufRead};
+
 use anyhow::Result;
 use clap::Parser;
 use rust9000::{Decision, Filter};
@@ -5,17 +7,28 @@ use rust9000::{Decision, Filter};
 #[derive(Debug, Parser)]
 #[command(version, about)]
 struct Args {
-    message: String,
+    message: Option<String>,
 }
 
 fn main() -> Result<()> {
     let args = Args::parse();
     let mut filter = Filter::new();
 
-    match filter.check(&args.message) {
-        Decision::Allow => println!("allow"),
-        Decision::Reject => println!("reject"),
+    if let Some(message) = args.message {
+        print_decision(filter.check(&message));
+        return Ok(());
+    }
+
+    for line in io::stdin().lock().lines() {
+        print_decision(filter.check(&line?));
     }
 
     Ok(())
+}
+
+fn print_decision(decision: Decision) {
+    match decision {
+        Decision::Allow => println!("allow"),
+        Decision::Reject => println!("reject"),
+    }
 }
