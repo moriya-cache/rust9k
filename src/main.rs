@@ -7,6 +7,9 @@ use rust9000::{Decision, Filter};
 #[derive(Debug, Parser)]
 #[command(version, about)]
 struct Args {
+    #[arg(long)]
+    stats: bool,
+
     message: Option<String>,
 }
 
@@ -21,6 +24,11 @@ fn main() -> Result<()> {
 
     for line in io::stdin().lock().lines() {
         print_decision(filter.check(&line?));
+    }
+
+    if args.stats {
+        let stats = filter.stats();
+        eprintln!("{} allowed, {} rejected", stats.allowed, stats.rejected);
     }
 
     Ok(())
