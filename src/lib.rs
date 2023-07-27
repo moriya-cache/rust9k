@@ -1,4 +1,5 @@
 use std::collections::HashSet;
+use unicode_normalization::UnicodeNormalization;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Decision {
@@ -17,10 +18,22 @@ impl Filter {
     }
 
     pub fn check(&mut self, message: &str) -> Decision {
-        if self.seen.insert(message.to_owned()) {
+        let normalized = normalize(message);
+
+        if self.seen.insert(normalized) {
             Decision::Allow
         } else {
             Decision::Reject
         }
     }
+}
+
+fn normalize(message: &str) -> String {
+    message
+        .nfkc()
+        .flat_map(char::to_lowercase)
+        .collect::<String>()
+        .split_whitespace()
+        .collect::<Vec<_>>()
+        .join(" ")
 }
