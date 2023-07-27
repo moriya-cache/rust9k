@@ -23,7 +23,11 @@ fn main() -> Result<()> {
     }
 
     for line in io::stdin().lock().lines() {
-        print_decision(filter.check(&line?));
+        let line = line?;
+        if line.trim().is_empty() {
+            continue;
+        }
+        print_decision(filter.check(&line));
     }
 
     if args.stats {
