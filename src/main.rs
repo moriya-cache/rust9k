@@ -8,7 +8,7 @@ use rust9000::{Decision, Filter};
 #[command(version, about)]
 struct Args {
     #[arg(long)]
-    quite: bool,
+    quiet: bool,
 
     #[arg(long)]
     stats: bool,
@@ -21,7 +21,7 @@ fn main() -> Result<()> {
     let mut filter = Filter::new();
 
     if let Some(message) = args.message {
-        print_decision(filter.check(&message), args.quite);
+        print_decision(filter.check(&message), args.quiet);
         return Ok(());
     }
 
@@ -30,7 +30,7 @@ fn main() -> Result<()> {
         if line.trim().is_empty() {
             continue;
         }
-        print_decision(filter.check(&line), args.quite);
+        print_decision(filter.check(&line), args.quiet);
     }
 
     if args.stats {
@@ -41,9 +41,9 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn print_decision(decision: Decision, quite: bool) {
+fn print_decision(decision: Decision, quiet: bool) {
     match decision {
-        Decision::Allow if !quite => println!("allow"),
+        Decision::Allow if !quiet => println!("allow"),
         Decision::Allow => {}
         Decision::Reject => println!("reject"),
     }
