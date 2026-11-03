@@ -1,13 +1,13 @@
 [package]
 name = "rust9000"
 version = "0.1.0"
-edition = "2021"
-rust-version = "1.70"
+edition = "2024"
+rust-version = "1.85"
 description = "A small Robot9000-style repetition filter"
 license = "MIT"
 
 [dependencies]
-anyhow = "1.0.72"
-clap = { version = "4.3.19", features = ["derive"] }
-unicode-normalization = "0.1.22"
+anyhow = "1.0.104"
+clap = { version = "4.6.7", features = ["derive"] }
+unicode-normalization = "0.1.26"
 
